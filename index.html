@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NeuroChat</title>
+<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+<div class="app">
+  <aside class="sidebar">
+    <div class="brand">
+      <div class="brand-icon">✦</div>
+      <div class="brand-text">NeuroChat</div>
+    </div>
+
+    <div class="side-head">
+      <span>Провайдеры</span>
+      <button class="icon-btn" id="addProviderBtn" title="Добавить провайдера">+</button>
+    </div>
+
+    <ul class="providers" id="providerList"></ul>
+
+    <div class="side-foot">
+      <button class="ghost-btn" id="clearChatBtn">🧹 Очистить чат</button>
+    </div>
+  </aside>
+
+  <main class="chat">
+    <header class="chat-head">
+      <div class="chat-info">
+        <div class="chat-provider" id="currentProvider">— выберите провайдера —</div>
+        <div class="chat-model" id="currentModel">модель не выбрана</div>
+      </div>
+      <div class="head-actions">
+        <button class="ghost-btn compact" id="editCurrentBtn" title="Настроить провайдера">⚙ Провайдер</button>
+        <button class="primary-btn" id="modelBtn">🎛 Модель</button>
+      </div>
+    </header>
+
+    <div class="messages" id="messages">
+      <div class="empty">
+        <div class="empty-icon">✦</div>
+        <div class="empty-title">Начните диалог</div>
+        <div class="empty-sub">Выберите провайдера, настройте ключ (⚙) и модель</div>
+      </div>
+    </div>
+
+    <div class="composer">
+      <textarea id="input" rows="1" placeholder="Спросите что-нибудь… (Enter — отправить, Shift+Enter — перенос)"></textarea>
+      <button class="send-btn" id="sendBtn" title="Отправить">➤</button>
+    </div>
+  </main>
+</div>
+
+<!-- Modal: Add / Edit Provider -->
+<div class="modal" id="providerModal">
+  <div class="modal-box">
+    <h2 id="modalTitle">➕ Новый провайдер</h2>
+
+    <label>Название<input id="pName" placeholder="My Provider"></label>
+    <label>ID (латиница, без пробелов)<input id="pId" placeholder="my_provider"></label>
+    <label>Base URL<input id="pUrl" placeholder="https://api.example.com/v1"></label>
+    <label>API ключ (любой формат: sk-, rs-, gsk_, sk-or-…)
+      <div class="row">
+        <input id="pKey" placeholder="sk-... / rs-... / gsk_..." type="password">
+        <button class="ghost-btn icon-in-row" id="toggleKeyBtn" title="Показать/скрыть">👁</button>
+      </div>
+    </label>
+    <label>Модели (через запятую)
+      <textarea id="pModels" rows="2" placeholder="deepseek-reasoner, deepseek-chat"></textarea>
+    </label>
+
+    <div class="test-status" id="testStatus"></div>
+
+    <div class="modal-actions">
+      <button class="ghost-btn" id="testProviderBtn">🔍 Проверить</button>
+      <button class="ghost-btn" data-close>Отмена</button>
+      <button class="primary-btn" id="saveProviderBtn">Сохранить</button>
+    </div>
+  </div>
+</div>
+
+<!-- Modal: Load / Add Model -->
+<div class="modal" id="modelModal">
+  <div class="modal-box">
+    <h2>🎛 Модель</h2>
+    <p class="hint">Введите ID модели вручную, выберите из списка ниже или подтяните из API провайдера. Модели с reasoning (R1, QwQ, o3) покажут размышления отдельным блоком 💭.</p>
+    <label>ID модели
+      <div class="row">
+        <input id="modelInput" placeholder="deepseek-reasoner / qwq-32b / …">
+        <button class="ghost-btn icon-in-row" id="fetchModelsBtn" title="Загрузить список">🔄</button>
+      </div>
+    </label>
+    <div class="models-list" id="modelsList"></div>
+    <div class="modal-actions">
+      <button class="ghost-btn" data-close>Отмена</button>
+      <button class="primary-btn" id="applyModelBtn">Применить</button>
+    </div>
+  </div>
+</div>
+
+<script src="{{ url_for('static', filename='app.js') }}"></script>
+</body>
+</html>
